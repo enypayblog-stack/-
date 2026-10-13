@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-// Жестко прописанный адрес твоего бэкенда на порту 3001
-const BACKEND_URL = 'https://solid-tribble-wvxvw6jpgwqvcggqw-3001.app.github.dev';
-
 const CLASSES = [
   { id: 'knight', name: 'Лицар', desc: 'Захист, щити та контратаки', icon: '🛡️' },
   { id: 'shadow', name: 'Тіньовик', desc: 'Ухилення, критичні удари та отрути', icon: '🗡️' },
@@ -25,14 +22,10 @@ export default function App() {
   const [msgText, setMsgText] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
 
-  const getBackendUrl = (endpoint) => {
-    return BACKEND_URL + endpoint;
-  };
-
   const handleAuth = async () => {
     const endpoint = isLogin ? '/api/login' : '/api/register';
     try {
-      const res = await fetch(getBackendUrl(endpoint), {
+      const res = await fetch(endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password, heroClass })
@@ -52,7 +45,7 @@ export default function App() {
   const sendChat = async () => {
     if (!msgText) return;
     try {
-      await fetch(getBackendUrl('/api/chat'), {
+      await fetch('/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sender: user.username, text: msgText })
@@ -64,7 +57,7 @@ export default function App() {
 
   const loadChat = async () => {
     try {
-      const res = await fetch(getBackendUrl('/api/chat'));
+      const res = await fetch('/api/chat');
       const data = await res.json();
       setChatMsgs(data);
     } catch (e) {}
@@ -196,4 +189,4 @@ export default function App() {
       </div>
     </div>
   );
-          }
+        }
