@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+// Жестко прописанный адрес твоего бэкенда на порту 3001
+const BACKEND_URL = 'https://solid-tribble-wvxvw6jpgwqvcggqw-3001.app.github.dev';
+
 const CLASSES = [
   { id: 'knight', name: 'Лицар', desc: 'Захист, щити та контратаки', icon: '🛡️' },
   { id: 'shadow', name: 'Тіньовик', desc: 'Ухилення, критичні удари та отрути', icon: '🗡️' },
@@ -22,11 +25,8 @@ export default function App() {
   const [msgText, setMsgText] = useState('');
   const [showEmojis, setShowEmojis] = useState(false);
 
-  // Динамически заменяем порт 5173 на 3001 в текущем URL браузера
   const getBackendUrl = (endpoint) => {
-    const loc = window.location;
-    const newHost = loc.host.replace('5173', '3001');
-    return `${loc.protocol}//${newHost}${endpoint}`;
+    return BACKEND_URL + endpoint;
   };
 
   const handleAuth = async () => {
@@ -196,4 +196,4 @@ export default function App() {
       </div>
     </div>
   );
-}
+          }
