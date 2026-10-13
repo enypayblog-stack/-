@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
+// ВСТАВЬ СЮДА СВОЮ ТОЧНУЮ ССЫЛКУ НА ПОРТ 3001 БЕЗ СЛЕША НА КОНЦЕ (взял её из вкладки "Порты"):
+const BACKEND_URL = 'https://solid-tribble-wvxvw6jpgwvqcgqw-3001.app.github.dev';
+
 const CLASSES = [
   { id: 'knight', name: 'Лицар', desc: 'Захист, щити та контратаки', icon: '🛡️' },
   { id: 'shadow', name: 'Тіньовик', desc: 'Ухилення, критичні удари та отрути', icon: '🗡️' },
@@ -24,10 +27,8 @@ export default function App() {
 
   const handleAuth = async () => {
     const endpoint = isLogin ? '/api/login' : '/api/register';
-    const serverUrl = window.location.origin.replace('5173', '3001') + endpoint;
-    
     try {
-      const res = await fetch(serverUrl, {
+      const res = await fetch(BACKEND_URL + endpoint, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password, heroClass })
@@ -46,9 +47,8 @@ export default function App() {
 
   const sendChat = async () => {
     if (!msgText) return;
-    const chatUrl = window.location.origin.replace('5173', '3001') + '/api/chat';
     try {
-      await fetch(chatUrl, {
+      await fetch(BACKEND_URL + '/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sender: user.username, text: msgText })
@@ -60,8 +60,7 @@ export default function App() {
 
   const loadChat = async () => {
     try {
-      const chatUrl = window.location.origin.replace('5173', '3001') + '/api/chat';
-      const res = await fetch(chatUrl);
+      const res = await fetch(BACKEND_URL + '/api/chat');
       const data = await res.json();
       setChatMsgs(data);
     } catch (e) {}
@@ -193,4 +192,4 @@ export default function App() {
       </div>
     </div>
   );
-}
+        }
