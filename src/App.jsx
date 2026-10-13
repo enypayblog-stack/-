@@ -23,35 +23,45 @@ export default function App() {
   const [showEmojis, setShowEmojis] = useState(false);
 
   const handleAuth = async () => {
-    const url = isLogin ? '/api/login' : '/api/register';
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password, heroClass })
-    });
-    const data = await res.json();
-    if (data.success) {
-      if (isLogin) setUser(data.user);
-      else { alert('Персонажа створено! Увійдіть.'); setIsLogin(true); }
-    } else {
-      alert(data.message);
+    const endpoint = isLogin ? '/api/login' : '/api/register';
+    const serverUrl = window.location.origin.replace('5173', '3001') + endpoint;
+    
+    try {
+      const res = await fetch(serverUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password, heroClass })
+      });
+      const data = await res.json();
+      if (data.success) {
+        if (isLogin) setUser(data.user);
+        else { alert('Персонажа створено! Увійдіть.'); setIsLogin(true); }
+      } else {
+        alert(data.message);
+      }
+    } catch (err) {
+      alert('Помилка підключення до сервера!');
     }
   };
 
   const sendChat = async () => {
     if (!msgText) return;
-    await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ sender: user.username, text: msgText })
-    });
-    setMsgText('');
-    loadChat();
+    const chatUrl = window.location.origin.replace('5173', '3001') + '/api/chat';
+    try {
+      await fetch(chatUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sender: user.username, text: msgText })
+      });
+      setMsgText('');
+      loadChat();
+    } catch (e) {}
   };
 
   const loadChat = async () => {
     try {
-      const res = await fetch('/api/chat');
+      const chatUrl = window.location.origin.replace('5173', '3001') + '/api/chat';
+      const res = await fetch(chatUrl);
       const data = await res.json();
       setChatMsgs(data);
     } catch (e) {}
@@ -183,4 +193,4 @@ export default function App() {
       </div>
     </div>
   );
-                }
+}
